@@ -24,13 +24,13 @@ interface CustomizeManifest {
   };
 }
 
-const RETRY_COUNT = 3;
+const MAX_RETRY_COUNT = 3;
 
 async function upload(
   kintoneApiClient: KintoneApiClient,
   manifest: CustomizeManifest,
   status: {
-    count: number;
+    retryCount: number;
     updateBody: any;
     updated: boolean;
   },
@@ -38,7 +38,7 @@ async function upload(
 ): Promise<void> {
   const m = getBoundMessage(options.lang);
   const appId = manifest.app;
-  let { count, updateBody, updated } = status;
+  let { retryCount, updateBody, updated } = status;
 
   try {
     if (!updateBody) {
@@ -100,14 +100,18 @@ async function upload(
     }
   } catch (e) {
     const isAuthenticationError = e instanceof AuthenticationError;
-    count++;
-    status = { count, updateBody, updated };
+    retryCount++;
     if (isAuthenticationError) {
       console.log(m("E_Authentication"));
-    } else if (count < RETRY_COUNT) {
+    } else if (retryCount < MAX_RETRY_COUNT) {
       await wait(1000);
       console.log(m("E_Retry"));
-      await upload(kintoneApiClient, manifest, status, options);
+      await upload(
+        kintoneApiClient,
+        manifest,
+        { retryCount, updateBody, updated },
+        options
+      );
     } else {
       console.log(e.message);
     }
@@ -127,7 +131,7 @@ export const run = async (
     fs.readFileSync(manifestFile, "utf8")
   );
   const status = {
-    count: 0,
+    retryCount: 0,
     updateBody: null,
     updated: false
   };
