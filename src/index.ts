@@ -12,17 +12,27 @@ export interface Option {
   guestSpaceId: number;
 }
 
+interface CustomizeManifest {
+  app: string;
+  scope: "ALL" | "ADMIN" | "NONE";
+  desktop: {
+    js: string[];
+    css: string[];
+  };
+  mobile: {
+    js: string[];
+  };
+}
+
 const RETRY_COUNT = 3;
 
 async function upload(
   kintoneApiClient: KintoneApiClient,
-  manifest: {
-    [propName: string]: any;
-  },
+  manifest: CustomizeManifest,
   status: {
     count: number;
     running: boolean;
-    uploaded: boolean;
+    updateBody: any;
     updated: boolean;
     deployed: boolean;
   },
@@ -30,7 +40,7 @@ async function upload(
 ): Promise<void> {
   const m = getBoundMessage(options.lang);
   const appId = manifest.app;
-  let { count, running, uploaded, updated, deployed } = status;
+  let { count, running, updateBody, updated, deployed } = status;
 
   // Stop running multiple times as "change" event will be fired as many times as the number of files in watching path
   if (running) {
@@ -39,15 +49,14 @@ async function upload(
   try {
     running = true;
 
-    const updateBody = JSON.parse(JSON.stringify(manifest));
-    if (!uploaded) {
+    if (!updateBody) {
       try {
         const [desktopJS, desktopCSS, mobileJS] = await Promise.all(
           [
             { files: manifest.desktop.js, type: "text/javascript" },
             { files: manifest.desktop.css, type: "text/css" },
             { files: manifest.mobile.js, type: "text/javascript" }
-          ].map(({ files, type }: { files: string[]; type: string }) =>
+          ].map(({ files, type }) =>
             Promise.all(
               files.map((file: string) =>
                 kintoneApiClient
@@ -60,11 +69,16 @@ async function upload(
             )
           )
         );
-        updateBody.desktop.js = desktopJS;
-        updateBody.desktop.css = desktopCSS;
-        updateBody.mobile.js = mobileJS;
+        updateBody = Object.assign({}, manifest, {
+          desktop: {
+            js: desktopJS,
+            css: desktopCSS
+          },
+          mobile: {
+            js: mobileJS
+          }
+        });
         console.log(m("M_FileUploaded"));
-        uploaded = true;
       } catch (e) {
         console.log(m("E_FileUploaded"));
         throw e;
@@ -99,7 +113,7 @@ async function upload(
     const isAuthenticationError = e instanceof AuthenticationError;
     count++;
     running = false;
-    status = { count, running, uploaded, updated, deployed };
+    status = { count, running, updateBody, updated, deployed };
     if (isAuthenticationError) {
       console.log(m("E_Authentication"));
     } else if (count < RETRY_COUNT) {
@@ -121,16 +135,18 @@ export const run = async (
 ): Promise<void> => {
   const m = getBoundMessage(options.lang);
 
-  const manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
+  const manifest: CustomizeManifest = JSON.parse(
+    fs.readFileSync(manifestFile, "utf8")
+  );
   const status = {
     count: 0,
     running: false,
-    uploaded: false,
+    updateBody: null,
     updated: false,
     deployed: false
   };
 
-  const files: [string] = manifest.desktop.js
+  const files = manifest.desktop.js
     .concat(manifest.desktop.css, manifest.mobile.js)
     .filter((fileOrPath: string) => !isUrlString(fileOrPath));
 
