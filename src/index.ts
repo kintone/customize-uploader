@@ -33,13 +33,12 @@ async function upload(
     count: number;
     updateBody: any;
     updated: boolean;
-    deployed: boolean;
   },
   options: Option
 ): Promise<void> {
   const m = getBoundMessage(options.lang);
   const appId = manifest.app;
-  let { count, updateBody, updated, deployed } = status;
+  let { count, updateBody, updated } = status;
 
   try {
     if (!updateBody) {
@@ -89,23 +88,20 @@ async function upload(
       }
     }
 
-    if (!deployed) {
-      try {
-        await kintoneApiClient.deploySetting(appId);
-        await kintoneApiClient.waitFinishingDeploy(appId, () =>
-          console.log(m("M_Deploying"))
-        );
-        console.log(m("M_Deployed"));
-        deployed = true;
-      } catch (e) {
-        console.log(m("E_Deployed"));
-        throw e;
-      }
+    try {
+      await kintoneApiClient.deploySetting(appId);
+      await kintoneApiClient.waitFinishingDeploy(appId, () =>
+        console.log(m("M_Deploying"))
+      );
+      console.log(m("M_Deployed"));
+    } catch (e) {
+      console.log(m("E_Deployed"));
+      throw e;
     }
   } catch (e) {
     const isAuthenticationError = e instanceof AuthenticationError;
     count++;
-    status = { count, updateBody, updated, deployed };
+    status = { count, updateBody, updated };
     if (isAuthenticationError) {
       console.log(m("E_Authentication"));
     } else if (count < RETRY_COUNT) {
@@ -133,8 +129,7 @@ export const run = async (
   const status = {
     count: 0,
     updateBody: null,
-    updated: false,
-    deployed: false
+    updated: false
   };
 
   const files = manifest.desktop.js
