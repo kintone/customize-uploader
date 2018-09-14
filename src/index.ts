@@ -31,7 +31,6 @@ async function upload(
   manifest: CustomizeManifest,
   status: {
     count: number;
-    running: boolean;
     updateBody: any;
     updated: boolean;
     deployed: boolean;
@@ -40,15 +39,9 @@ async function upload(
 ): Promise<void> {
   const m = getBoundMessage(options.lang);
   const appId = manifest.app;
-  let { count, running, updateBody, updated, deployed } = status;
+  let { count, updateBody, updated, deployed } = status;
 
-  // Stop running multiple times as "change" event will be fired as many times as the number of files in watching path
-  if (running) {
-    return;
-  }
   try {
-    running = true;
-
     if (!updateBody) {
       try {
         const [desktopJS, desktopCSS, mobileJS] = await Promise.all(
@@ -112,8 +105,7 @@ async function upload(
   } catch (e) {
     const isAuthenticationError = e instanceof AuthenticationError;
     count++;
-    running = false;
-    status = { count, running, updateBody, updated, deployed };
+    status = { count, updateBody, updated, deployed };
     if (isAuthenticationError) {
       console.log(m("E_Authentication"));
     } else if (count < RETRY_COUNT) {
@@ -140,7 +132,6 @@ export const run = async (
   );
   const status = {
     count: 0,
-    running: false,
     updateBody: null,
     updated: false,
     deployed: false
