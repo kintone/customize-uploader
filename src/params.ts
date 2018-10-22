@@ -5,20 +5,11 @@ import { getBoundMessage } from "./messages";
 interface Params {
   username?: string;
   password?: string;
-  basicAuthUsername?: string;
-  basicAuthPassword?: string;
   domain?: string;
   lang: Lang;
 }
 
-export const inquireParams = ({
-  username,
-  password,
-  basicAuthUsername,
-  basicAuthPassword,
-  domain,
-  lang
-}: Params) => {
+export const inquireParams = ({ username, password, domain, lang }: Params) => {
   const m = getBoundMessage(lang);
   const questions = [
     {
@@ -44,33 +35,10 @@ export const inquireParams = ({
       default: password,
       when: () => !password,
       validate: (v: string) => !!v
-    },
-    {
-      type: "input",
-      name: "basicAuthUsername",
-      message: m("Q_BasicAuthUserName"),
-      default: basicAuthUsername,
-      when: () => !basicAuthUsername
-    },
-    {
-      type: "password",
-      name: "basicAuthPassword",
-      message: m("Q_BasicAuthPassword"),
-      default: basicAuthPassword,
-      when: () => !basicAuthPassword
     }
   ];
 
-  return inquirer.prompt(questions).then(answers =>
-    Object.assign(
-      {
-        username,
-        password,
-        basicAuthUsername,
-        basicAuthPassword,
-        domain
-      },
-      answers
-    )
-  );
+  return inquirer
+    .prompt(questions)
+    .then(answers => Object.assign({ username, password, domain }, answers));
 };

@@ -105,8 +105,8 @@ if (!manifestFile) {
   process.exit(1);
 }
 
-inquireParams({ username, password, basicAuthUsername, basicAuthPassword, domain, lang })
-  .then(({ username, password, basicAuthUsername, basicAuthPassword, domain }) => (
+inquireParams({ username, password, domain, lang })
+  .then(({ username, password, domain }) => (
     run(domain, username, password, basicAuthUsername, basicAuthPassword, manifestFile, options)
   ))
   .catch(error => console.log(error.message));

@@ -67,8 +67,6 @@ If you omit the options, you can input the options interactively.
 ? Input your domain: example.cybozu.com
 ? Input your username: sato
 ? Input your password: [hidden]
-? Input your Basic Authentication username (Optional): sato
-? Input your Basic Authentication password (Optional): [hidden]
 ```
 
 ## Example

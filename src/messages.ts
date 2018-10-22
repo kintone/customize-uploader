@@ -20,14 +20,6 @@ const messages = {
     en: "Input your password:",
     ja: "パスワードを入力してください:"
   },
-  Q_BasicAuthUserName: {
-    en: "Input your Basic Authentication username (Optional):",
-    ja: "Basic認証のログイン名を入力してください(省略可):"
-  },
-  Q_BasicAuthPassword: {
-    en: "Input your Basic Authentication password (Optional):",
-    ja: "Basic認証のパスワードを入力してください(省略可):"
-  },
   M_StartUploading: {
     en: "Start uploading customize files",
     ja: "カスタマイズのアップロードを開始します"
