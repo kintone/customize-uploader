@@ -46,6 +46,8 @@ ${manifestFile}
     --domain Domain of your kintone
     --username Login username
     --password User's password
+    --basic-auth-username Basic Authentication username
+    --basic-auth-password Basic Authentication password
     --proxy Proxy server
     --watch Watch the changes of customize files and re-run
     --lang Using language (en or ja)
@@ -54,6 +56,8 @@ ${manifestFile}
     domain: KINTONE_DOMAIN
     username: KINTONE_USERNAME
     password: KINTONE_PASSWORD
+    basic-auth-username: KINTONE_BASIC_AUTH_USERNAME
+    basic-auth-password: KINTONE_BASIC_AUTH_PASSWORD
     proxy: HTTPS_PROXY or HTTP_PROXY
 ```
 
@@ -63,6 +67,8 @@ If you omit the options, you can input the options interactively.
 ? Input your domain: example.cybozu.com
 ? Input your username: sato
 ? Input your password: [hidden]
+? Input your Basic Authentication username (Optional): sato
+? Input your Basic Authentication password (Optional): [hidden]
 ```
 
 ## Example
@@ -98,6 +104,8 @@ To upload files, run the `kintone-customize-uploader` .
 ? Input your domain: example.cybozu.com
 ? Input your username: sato
 ? Input your password: [hidden]
+? Input your Basic Authentication username (Optional):
+? Input your Basic Authentication password (Optional):
 
 sample/customize.js has been uploaded!
 sample/51-modern-default.css has been uploaded!
