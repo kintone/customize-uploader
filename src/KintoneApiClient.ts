@@ -170,7 +170,10 @@ export default class KintoneApiClient {
     return requestOptions;
   }
 
-  private getBase64EncodedCredentials(username: string, password: string): string {
+  private getBase64EncodedCredentials(
+    username: string,
+    password: string
+  ): string {
     const buffer = new Buffer(username + ":" + password);
     return buffer.toString("base64");
   }
