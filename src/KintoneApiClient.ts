@@ -38,7 +38,7 @@ export default class KintoneApiClient {
     domain: string,
     public options: Option
   ) {
-    this.auth = this.getXCybozuAuthorization(username, password);
+    this.auth = this.getBase64EncodedCredentials(username, password);
     this.basicAuth =
       basicAuthUsername && basicAuthPassword
         ? this.getBasicAuthorization(basicAuthUsername, basicAuthPassword)
@@ -170,7 +170,7 @@ export default class KintoneApiClient {
     return requestOptions;
   }
 
-  private getXCybozuAuthorization(username: string, password: string): string {
+  private getBase64EncodedCredentials(username: string, password: string): string {
     const buffer = new Buffer(username + ":" + password);
     return buffer.toString("base64");
   }
@@ -179,7 +179,7 @@ export default class KintoneApiClient {
     basicAuthUsername: string,
     basicAuthPassword: string
   ): string {
-    return `Basic ${this.getXCybozuAuthorization(
+    return `Basic ${this.getBase64EncodedCredentials(
       basicAuthUsername,
       basicAuthPassword
     )}`;
