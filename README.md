@@ -102,8 +102,6 @@ To upload files, run the `kintone-customize-uploader` .
 ? Input your domain: example.cybozu.com
 ? Input your username: sato
 ? Input your password: [hidden]
-? Input your Basic Authentication username (Optional):
-? Input your Basic Authentication password (Optional):
 
 sample/customize.js has been uploaded!
 sample/51-modern-default.css has been uploaded!
