@@ -3,6 +3,7 @@
 const osLocale = require('os-locale');
 const meow = require('meow');
 const { run } = require('../dist/src/index');
+const { runImport } = require('../dist/src/import');
 const { inquireParams } = require('../dist/src/params');
 const { getDefaultLang } = require('../dist/src/lang');
 const { getMessage } = require('../dist/src/messages');
@@ -29,6 +30,8 @@ const cli = meow(
     --basic-auth-password Basic Authentication password
     --proxy Proxy server
     --watch Watch the changes of customize files and re-run
+    --import-customize-setting -i download and generate customize setting
+    --dest-dir -d output directory of import-customize-setting option 
     --lang Using language (en or ja)
     --guest-space-id Guest space ID for uploading files
     You can set the values through environment variables
@@ -77,6 +80,16 @@ const cli = meow(
         type: 'number',
         default: 0
       },
+      importCustomizeSetting : {
+        type: 'boolean',
+        default: false,
+        alias: 'i'
+      },
+      destDir: {
+        type: 'string',
+        default: 'dest',
+        alias: 'd'
+      }
     }
   }
 );
@@ -91,12 +104,18 @@ const {
   proxy,
   watch,
   lang,
-  guestSpaceId
+  guestSpaceId,
+  importCustomizeSetting,
+  destDir,
 } = cli.flags;
 
 const options = proxy ? { watch, lang, proxy } : { watch, lang };
 if (guestSpaceId) {
   options.guestSpaceId = guestSpaceId;
+}
+
+if(importCustomizeSetting) {
+  options.destDir = destDir;
 }
 
 if (!manifestFile) {
@@ -106,8 +125,12 @@ if (!manifestFile) {
 }
 
 inquireParams({ username, password, domain, lang })
-  .then(({ username, password, domain }) => (
-    run(domain, username, password, basicAuthUsername, basicAuthPassword, manifestFile, options)
-  ))
+  .then(({ username, password, domain }) => {
+    if(importCustomizeSetting) {
+      runImport(domain, username, password, basicAuthUsername, basicAuthPassword, manifestFile, options)
+    } else {
+      run(domain, username, password, basicAuthUsername, basicAuthPassword, manifestFile, options)
+    }
+  })
   .catch(error => console.log(error.message));
-  ;
+
