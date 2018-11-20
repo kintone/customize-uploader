@@ -1,4 +1,5 @@
 import fs from "fs";
+import mkdirp from "mkdirp";
 import { sep } from "path";
 import { Constans } from "./constants";
 import { CustomizeManifest } from "./index";
@@ -112,7 +113,7 @@ function exportAsManifestFile(
   };
 
   if (!fs.existsSync(`${destRootDir}`)) {
-    fs.mkdirSync(`${destRootDir}`, { recursive: true });
+    mkdirp.sync(`${destRootDir}`);
   }
   fs.writeFile(
     `${destRootDir}${sep}customize-manifest.json`,
@@ -140,7 +141,7 @@ function downloadCustomizeFiles(
     `${destDir}${sep}desktop${sep}js${sep}`,
     `${destDir}${sep}desktop${sep}css${sep}`,
     `${destDir}${sep}mobile${sep}js${sep}`
-  ].forEach(path => fs.mkdirSync(path, { recursive: true }));
+  ].forEach(path => mkdirp.sync(path));
 
   desktopJs.forEach(
     downloadAndWriteFile(kintoneApiClient, `${destDir}${sep}desktop${sep}js`)
