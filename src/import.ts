@@ -52,7 +52,7 @@ export async function importCustomizeSetting(
 
   try {
     const appCustomize = kintoneApiClient.getAppCustomize(appId);
-    appCustomize
+    return appCustomize
       .then((resp: GetAppCustomizeResp) => {
         return exportAsManifestFile(appId, options.destDir, resp);
       })
