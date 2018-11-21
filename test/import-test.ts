@@ -1,5 +1,6 @@
 import assert from "assert";
 import * as fs from "fs";
+import rimraf from "rimraf";
 import {
   ImportCustomizeManifest,
   importCustomizeSetting,
@@ -9,8 +10,7 @@ import MockKintoneApiClient from "./MockKintoneApiClient";
 
 describe("import", () => {
   const testDestDir = "testDestDir";
-  const expectedDownloadFiles = [
-    `${testDestDir}/customize-manifest.json`,
+  const filesToTestContent = [
     `${testDestDir}/desktop/js/bootstrap.min.js`,
     `${testDestDir}/desktop/js/a.js`,
     `${testDestDir}/desktop/css/bootstrap.min.css`,
@@ -18,15 +18,6 @@ describe("import", () => {
     `${testDestDir}/desktop/css/bootstrap-grid.min.css`,
     `${testDestDir}/mobile/js/bootstrap.js`,
     `${testDestDir}/mobile/js/b.js`
-  ];
-
-  const expectedGenerateDirs = [
-    `${testDestDir}/desktop/js`,
-    `${testDestDir}/desktop/css`,
-    `${testDestDir}/desktop`,
-    `${testDestDir}/mobile/js`,
-    `${testDestDir}/mobile`,
-    `${testDestDir}`
   ];
 
   const uploadFileBody = `(function() { console.log("hello"); })();`;
@@ -63,8 +54,12 @@ describe("import", () => {
     });
 
     afterEach(() => {
-      expectedDownloadFiles.forEach(path => fs.unlinkSync(path));
-      expectedGenerateDirs.forEach(dir => fs.rmdirSync(dir));
+      const handleError = (err: Error) => {
+        if (err) {
+          throw err;
+        }
+      };
+      rimraf(`${testDestDir}`, handleError);
     });
 
     const assertManifestContent = async (err: any, buffer: Buffer) => {
@@ -204,10 +199,6 @@ describe("import", () => {
       );
 
       assertImportUseCaseApiRequest(kintoneApiClient);
-
-      const filesToTestContent = expectedDownloadFiles.filter(
-        f => !f.endsWith("customize-manifest.json")
-      );
       return filesToTestContent.map(assertDownloadFile);
     });
   });
