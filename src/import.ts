@@ -60,9 +60,11 @@ export async function importCustomizeSetting(
     const appCustomize = kintoneApiClient.getAppCustomize(appId);
     return appCustomize
       .then((resp: GetAppCustomizeResp) => {
+        console.log(m("M_GenerateManifestFile"));
         return exportAsManifestFile(appId, options.destDir, resp);
       })
       .then((resp: GetAppCustomizeResp) => {
+        console.log(m("M_DownloadUploadedFile"));
         return downloadCustomizeFiles(
           kintoneApiClient,
           appId,
@@ -180,6 +182,7 @@ export const runImport = async (
   manifestFile: string,
   options: Option
 ): Promise<void> => {
+  const m = getBoundMessage(options.lang);
   const manifest: ImportCustomizeManifest = JSON.parse(
     fs.readFileSync(manifestFile, "utf8")
   );
@@ -196,4 +199,5 @@ export const runImport = async (
     options
   );
   await importCustomizeSetting(kintoneApiClient, manifest, status, options);
+  console.log(m("M_CommandImportFinish"));
 };
