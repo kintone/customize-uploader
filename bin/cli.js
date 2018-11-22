@@ -17,7 +17,6 @@ const {
   KINTONE_BASIC_AUTH_USERNAME,
   KINTONE_BASIC_AUTH_PASSWORD
 } = process.env;
-
 const cli = meow(
   `
   Usage
@@ -30,8 +29,9 @@ const cli = meow(
     --basic-auth-password Basic Authentication password
     --proxy Proxy server
     --watch Watch the changes of customize files and re-run
-    --import-customize-setting -i download and generate customize setting
-    --dest-dir -d output directory of import-customize-setting option 
+    --dest-dir -d option for subcommand import. 
+                  this option stands for output directory
+                  default value is dest/
     --lang Using language (en or ja)
     --guest-space-id Guest space ID for uploading files
     You can set the values through environment variables
@@ -94,7 +94,13 @@ const cli = meow(
   }
 );
 
-const manifestFile = cli.input[0];
+const subCommands = ["import"];
+const hasSubCommand = subCommands.indexOf(cli.input[0]) >= 0;
+const subCommand = hasSubCommand ? cli.input[0] : null;
+const isImportCommand = subCommand === "import";
+
+const manifestFile =  hasSubCommand ? cli.input[1] : cli.input[0];
+
 const {
   username,
   password,
@@ -105,7 +111,6 @@ const {
   watch,
   lang,
   guestSpaceId,
-  importCustomizeSetting,
   destDir,
 } = cli.flags;
 
@@ -114,7 +119,7 @@ if (guestSpaceId) {
   options.guestSpaceId = guestSpaceId;
 }
 
-if(importCustomizeSetting) {
+if(isImportCommand) {
   options.destDir = destDir;
 }
 
@@ -126,7 +131,7 @@ if (!manifestFile) {
 
 inquireParams({ username, password, domain, lang })
   .then(({ username, password, domain }) => {
-    if(importCustomizeSetting) {
+    if(isImportCommand) {
       runImport(domain, username, password, basicAuthUsername, basicAuthPassword, manifestFile, options)
     } else {
       run(domain, username, password, basicAuthUsername, basicAuthPassword, manifestFile, options)
