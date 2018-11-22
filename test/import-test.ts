@@ -27,7 +27,7 @@ describe("import", () => {
     let manifest: ImportCustomizeManifest;
     let status: { retryCount: number };
     let options: Option;
-    beforeEach(async () => {
+    beforeEach(() => {
       kintoneApiClient = new MockKintoneApiClient(
         "kintone",
         "hogehoge",
@@ -54,18 +54,10 @@ describe("import", () => {
     });
 
     afterEach(() => {
-      const handleError = (err: Error) => {
-        if (err) {
-          throw err;
-        }
-      };
-      rimraf(`${testDestDir}`, handleError);
+      rimraf.sync(`${testDestDir}`);
     });
 
-    const assertManifestContent = async (err: any, buffer: Buffer) => {
-      if (err) {
-        assert.fail(err.message);
-      }
+    const assertManifestContent = (buffer: Buffer) => {
       const appCustomize = {
         app: "1",
         scope: "ALL",
@@ -94,16 +86,10 @@ describe("import", () => {
       assert.deepStrictEqual(JSON.parse(buffer.toString()), appCustomize);
     };
 
-    const assertDownloadFileContents = async (err: any, buffer: Buffer) => {
-      if (err) {
-        assert.fail(err.message);
-      }
-      assert.strictEqual(uploadFileBody, buffer.toString());
-    };
-
     const assertDownloadFile = (path: string) => {
-      assert.ok(fs.existsSync(path), `${path} is exists`);
-      fs.readFile(path, assertDownloadFileContents);
+      assert.ok(fs.existsSync(path), `test ${path} is exists`);
+      const content = fs.readFileSync(path);
+      assert.strictEqual(uploadFileBody, content.toString());
     };
 
     const assertImportUseCaseApiRequest = (
@@ -170,7 +156,7 @@ describe("import", () => {
       assert.deepStrictEqual(mockKintoneApiClient.logs, expected);
     };
 
-    it("should success generate customize-manifest.json and download uploaded js/css files", async () => {
+    it("should success generate customize-manifest.json and download uploaded js/css files", () => {
       const getAppCustomizeResponse = JSON.parse(
         fs
           .readFileSync("test/fixtures/get-appcustomize-response.json")
@@ -184,22 +170,21 @@ describe("import", () => {
         getAppCustomizeResponse
       );
 
-      await importCustomizeSetting(
+      const execCommand = importCustomizeSetting(
         kintoneApiClient,
         manifest,
         status,
         options
-      ).then(() => {
-        assertImportUseCaseApiRequest(kintoneApiClient);
-      });
-
-      fs.readFile(
-        `${testDestDir}/customize-manifest.json`,
-        assertManifestContent
       );
 
-      assertImportUseCaseApiRequest(kintoneApiClient);
-      return filesToTestContent.map(assertDownloadFile);
+      return execCommand.then(() => {
+        assertImportUseCaseApiRequest(kintoneApiClient);
+        const manifestFile = `${testDestDir}/customize-manifest.json`;
+        assert.ok(fs.existsSync(manifestFile), `test ${manifestFile} exists`);
+        const contents = fs.readFileSync(manifestFile);
+        assertManifestContent(contents);
+        filesToTestContent.map(assertDownloadFile);
+      });
     });
   });
 });

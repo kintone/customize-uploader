@@ -59,9 +59,6 @@ export async function importCustomizeSetting(
       })
       .then((resp: GetAppCustomizeResp) => {
         downloadCustomizeFiles(kintoneApiClient, appId, options.destDir, resp);
-      })
-      .catch(e => {
-        throw e;
       });
   } catch (e) {
     const isAuthenticationError = e instanceof AuthenticationError;
@@ -115,14 +112,9 @@ function exportAsManifestFile(
   if (!fs.existsSync(`${destRootDir}`)) {
     mkdirp.sync(`${destRootDir}`);
   }
-  fs.writeFile(
+  fs.writeFileSync(
     `${destRootDir}${sep}customize-manifest.json`,
-    JSON.stringify(customizeJson, null, 4),
-    err => {
-      if (err) {
-        throw err;
-      }
-    }
+    JSON.stringify(customizeJson, null, 4)
   );
   return resp;
 }
@@ -162,13 +154,9 @@ function downloadAndWriteFile(
     if (f.type === "URL") {
       return;
     }
-    kintoneApiClient.downloadFile(f.file.fileKey).then(resp =>
-      fs.writeFile(`${destDir}${sep}${f.file.name}`, resp, err => {
-        if (err) {
-          throw err;
-        }
-      })
-    );
+    kintoneApiClient
+      .downloadFile(f.file.fileKey)
+      .then(resp => fs.writeFileSync(`${destDir}${sep}${f.file.name}`, resp));
   };
 }
 
