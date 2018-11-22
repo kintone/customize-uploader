@@ -35,8 +35,13 @@ type CustomizeFile = UploadedFile | CDNFile;
 
 interface GetAppCustomizeResp {
   scope: "ALL" | "ADMIN" | "NONE";
-  desktop: any;
-  mobile: any;
+  desktop: {
+    js: CustomizeFile[];
+    css: CustomizeFile[];
+  };
+  mobile: {
+    js: CustomizeFile[];
+  };
 }
 
 export async function importCustomizeSetting(
