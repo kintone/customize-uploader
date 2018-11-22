@@ -63,7 +63,12 @@ export async function importCustomizeSetting(
         return exportAsManifestFile(appId, options.destDir, resp);
       })
       .then((resp: GetAppCustomizeResp) => {
-        downloadCustomizeFiles(kintoneApiClient, appId, options.destDir, resp);
+        return downloadCustomizeFiles(
+          kintoneApiClient,
+          appId,
+          options.destDir,
+          resp
+        );
       });
   } catch (e) {
     const isAuthenticationError = e instanceof AuthenticationError;
@@ -118,18 +123,18 @@ function exportAsManifestFile(
     mkdirp.sync(`${destRootDir}`);
   }
   fs.writeFileSync(
-    `${destRootDir}${sep}customize-manifest.json`,
+    `${destRootDir}/customize-manifest.json`,
     JSON.stringify(customizeJson, null, 4)
   );
   return resp;
 }
 
-function downloadCustomizeFiles(
+async function downloadCustomizeFiles(
   kintoneApiClient: KintoneApiClient,
   appId: string,
   destDir: string,
   { desktop, mobile }: GetAppCustomizeResp
-) {
+): Promise<any> {
   const desktopJs: CustomizeFile[] = desktop.js;
   const desktopCss: CustomizeFile[] = desktop.css;
   const mobileJs: CustomizeFile[] = mobile.js;
@@ -140,22 +145,23 @@ function downloadCustomizeFiles(
     `${destDir}${sep}mobile${sep}js${sep}`
   ].forEach(path => mkdirp.sync(path));
 
-  desktopJs.forEach(
+  const desktopJsPromise = desktopJs.map(
     downloadAndWriteFile(kintoneApiClient, `${destDir}${sep}desktop${sep}js`)
   );
-  desktopCss.forEach(
+  const desktopCssPromise = desktopCss.map(
     downloadAndWriteFile(kintoneApiClient, `${destDir}${sep}desktop${sep}css`)
   );
-  mobileJs.forEach(
+  const mobileJsPromise = mobileJs.map(
     downloadAndWriteFile(kintoneApiClient, `${destDir}${sep}mobile${sep}js`)
   );
+  return desktopJsPromise.concat(desktopCssPromise).concat(mobileJsPromise);
 }
 
 function downloadAndWriteFile(
   kintoneApiClient: KintoneApiClient,
   destDir: string
 ): (f: CustomizeFile) => void {
-  return f => {
+  return async f => {
     if (f.type === "URL") {
       return;
     }
