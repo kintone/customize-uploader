@@ -66,21 +66,21 @@ describe("import", () => {
           js: [
             "https://js.cybozu.com/vuejs/v2.5.17/vue.min.js",
             "https://js.cybozu.com/lodash/4.17.11/lodash.min.js",
-            `${testDestDir}${sep}desktop${sep}js${sep}bootstrap.min.js`,
-            `${testDestDir}${sep}desktop${sep}js${sep}a.js`
+            `${testDestDir}/desktop/js/bootstrap.min.js`,
+            `${testDestDir}/desktop/js/a.js`
           ],
           css: [
-            `${testDestDir}${sep}desktop${sep}css${sep}bootstrap.min.css`,
-            `${testDestDir}${sep}desktop${sep}css${sep}bootstrap-reboot.min.css`,
-            `${testDestDir}${sep}desktop${sep}css${sep}bootstrap-grid.min.css`
+            `${testDestDir}/desktop/css/bootstrap.min.css`,
+            `${testDestDir}/desktop/css/bootstrap-reboot.min.css`,
+            `${testDestDir}/desktop/css/bootstrap-grid.min.css`
           ]
         },
         mobile: {
           js: [
             "https://js.cybozu.com/jquery/3.3.1/jquery.min.js",
             "https://js.cybozu.com/jqueryui/1.12.1/jquery-ui.min.js",
-            `${testDestDir}${sep}mobile${sep}js${sep}bootstrap.js`,
-            `${testDestDir}${sep}mobile${sep}js${sep}b.js`
+            `${testDestDir}/mobile/js/bootstrap.js`,
+            `${testDestDir}/mobile/js/b.js`
           ]
         }
       };
