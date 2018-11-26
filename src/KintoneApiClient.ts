@@ -139,7 +139,7 @@ export default class KintoneApiClient {
   public async sendRequest(params: RequestParams) {
     const requestOptions = this.buildRequestOptions(params);
     try {
-      return await request(requestOptions).then(response => {
+      return request(requestOptions).then(response => {
         if (response.statusCode !== 200) {
           throw new Error(
             `Failed to Request(StatusCode:${response.statusCode}`

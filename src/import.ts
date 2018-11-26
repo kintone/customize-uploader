@@ -99,7 +99,7 @@ function exportAsManifestFile(
 ): GetAppCustomizeResp {
   const toNameOrUrl = (destDir: string) => (f: CustomizeFile) => {
     if (f.type === "FILE") {
-      return `${destDir}${sep}${f.file.name}`;
+      return `${destDir}/${f.file.name}`;
     } else {
       return f.url;
     }
@@ -113,11 +113,11 @@ function exportAsManifestFile(
     app: appId,
     scope: resp.scope,
     desktop: {
-      js: desktopJs.map(toNameOrUrl(`${destRootDir}${sep}desktop${sep}js`)),
-      css: desktopCss.map(toNameOrUrl(`${destRootDir}${sep}desktop${sep}css`))
+      js: desktopJs.map(toNameOrUrl(`${destRootDir}/desktop/js`)),
+      css: desktopCss.map(toNameOrUrl(`${destRootDir}/desktop/css`))
     },
     mobile: {
-      js: mobileJs.map(toNameOrUrl(`${destRootDir}${sep}mobile${sep}js`))
+      js: mobileJs.map(toNameOrUrl(`${destRootDir}/mobile/js`))
     }
   };
 
