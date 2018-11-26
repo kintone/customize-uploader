@@ -34,6 +34,11 @@ const cli = meow(
                   default value is dest/
     --lang Using language (en or ja)
     --guest-space-id Guest space ID for uploading files
+
+   SubCommands
+    import generate customize-manifest.json and 
+           download js/css files from existing app customization  
+    
     You can set the values through environment variables
     domain: KINTONE_DOMAIN
     username: KINTONE_USERNAME
