@@ -85,11 +85,7 @@ const cli = meow(
         type: 'number',
         default: 0
       },
-      importCustomizeSetting : {
-        type: 'boolean',
-        default: false,
-        alias: 'i'
-      },
+      // Optional option for import subcommand
       destDir: {
         type: 'string',
         default: 'dest',
