@@ -167,7 +167,7 @@ function downloadAndWriteFile(
     if (f.type === "URL") {
       return;
     }
-    kintoneApiClient
+    return kintoneApiClient
       .downloadFile(f.file.fileKey)
       .then(resp => fs.writeFileSync(`${destDir}${sep}${f.file.name}`, resp));
   };
