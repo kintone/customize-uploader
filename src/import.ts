@@ -156,7 +156,7 @@ async function downloadCustomizeFiles(
   const mobileJsPromise = mobileJs.map(
     downloadAndWriteFile(kintoneApiClient, `${destDir}${sep}mobile${sep}js`)
   );
-  return desktopJsPromise.concat(desktopCssPromise).concat(mobileJsPromise);
+  return [...desktopJsPromise, ...desktopCssPromise, ...mobileJsPromise];
 }
 
 function downloadAndWriteFile(
