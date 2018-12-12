@@ -20,6 +20,14 @@ const messages = {
     en: "Input your password:",
     ja: "パスワードを入力してください:"
   },
+  Q_AppId: {
+    en: "Input your app id:",
+    ja: "アプリIDを入力してください:"
+  },
+  Q_Scope: {
+    en: "Input your scope:",
+    ja: "アプリの公開グループを入力してください:" // TODO: Need to fix
+  },
   M_StartUploading: {
     en: "Start uploading customize files",
     ja: "カスタマイズのアップロードを開始します"
@@ -49,8 +57,12 @@ const messages = {
     ja:
       "kintoneのアプリからカスタマイズ設定されたファイルをダウンロードしています"
   },
+  M_CommandInitFinish: {
+    en: "customize-manifest.json file has been created",
+    ja: "customize-manifest.json を生成しました"
+  },
   M_CommandImportFinish: {
-    en: "Fisnish importing from kintone app customize",
+    en: "Finish importing from kintone app customize",
     ja: "kintoneのアプリカスタマイズからインポートが完了しました"
   },
   E_Updated: {
