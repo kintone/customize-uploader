@@ -22,7 +22,7 @@ describe("init", () => {
       assert.deepStrictEqual(JSON.parse(buffer.toString()), appCustomize);
     };
 
-    it("should success generate customize-manifest.json", async () => {
+    it("should success generating customize-manifest.json", async () => {
       const manifestFile = `${testDestDir}/customize-manifest.json`;
       const manifestFileContent: InitCustomizeManifest = getInitCustomizeManifest(
         "1"
