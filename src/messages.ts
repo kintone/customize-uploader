@@ -24,10 +24,6 @@ const messages = {
     en: "Input your app id:",
     ja: "アプリIDを入力してください:"
   },
-  Q_Scope: {
-    en: "Input your scope:",
-    ja: "アプリの公開グループを入力してください:" // TODO: Need to fix
-  },
   M_StartUploading: {
     en: "Start uploading customize files",
     ja: "カスタマイズのアップロードを開始します"
