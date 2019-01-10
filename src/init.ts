@@ -52,5 +52,5 @@ export const runInit = async (
   const m = getBoundMessage(lang);
   const customizeManifest = getInitCustomizeManifest(appId, scope);
   await generateCustomizeManifest(customizeManifest, destDir);
-  console.log(m("M_CommandInitFinish"));
+  console.log(`${destDir}/${m("M_CommandInitFinish")}`);
 };
