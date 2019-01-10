@@ -1,16 +1,16 @@
 import fs from "fs";
 import mkdirp from "mkdirp";
+import { CustomizeManifest } from "./index";
 import { Lang } from "./lang";
 import { getBoundMessage } from "./messages";
-import { CustomizeManifest } from "./index";
 
 export const getInitCustomizeManifest = (
   appId: string,
-  scope: "ALL" | "ADMIN" | "NONE",
+  scope: "ALL" | "ADMIN" | "NONE"
 ): CustomizeManifest => {
   return {
     app: appId,
-    scope: scope,
+    scope,
     desktop: {
       js: [],
       css: []
