@@ -1,10 +1,10 @@
 import assert from "assert";
 import fs from "fs";
 import rimraf from "rimraf";
+import { CustomizeManifest } from "../src/index";
 import {
   generateCustomizeManifest,
-  getInitCustomizeManifest,
-  InitCustomizeManifest
+  getInitCustomizeManifest
 } from "../src/init";
 
 describe("init", () => {
@@ -24,8 +24,9 @@ describe("init", () => {
 
     it("should success generating customize-manifest.json", async () => {
       const manifestFile = `${testDestDir}/customize-manifest.json`;
-      const manifestFileContent: InitCustomizeManifest = getInitCustomizeManifest(
-        "1"
+      const manifestFileContent: CustomizeManifest = getInitCustomizeManifest(
+        "1",
+        "ALL"
       );
       await generateCustomizeManifest(manifestFileContent, testDestDir);
       const content = fs.readFileSync(manifestFile);

@@ -138,8 +138,8 @@ if (!isInitCommand && !manifestFile) {
 
 if(isInitCommand) {
   inquireInitParams(lang)
-    .then(({ appId, lang }) => {
-      runInit(appId, lang, options.destDir);
+    .then(({ appId, scope, lang }) => {
+      runInit(appId, scope, lang, options.destDir);
     })
     .catch(error => console.log(error.message));
 } else {

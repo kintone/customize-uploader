@@ -2,25 +2,15 @@ import fs from "fs";
 import mkdirp from "mkdirp";
 import { Lang } from "./lang";
 import { getBoundMessage } from "./messages";
-
-export interface InitCustomizeManifest {
-  app: string;
-  scope: "";
-  desktop: {
-    js: [];
-    css: [];
-  };
-  mobile: {
-    js: [];
-  };
-}
+import { CustomizeManifest } from "./index";
 
 export const getInitCustomizeManifest = (
-  appId: string
-): InitCustomizeManifest => {
+  appId: string,
+  scope: "ALL" | "ADMIN" | "NONE",
+): CustomizeManifest => {
   return {
     app: appId,
-    scope: "",
+    scope: scope,
     desktop: {
       js: [],
       css: []
@@ -32,7 +22,7 @@ export const getInitCustomizeManifest = (
 };
 
 export const generateCustomizeManifest = (
-  customizeManifest: InitCustomizeManifest,
+  customizeManifest: CustomizeManifest,
   destDir: string
 ): Promise<any> => {
   if (!fs.existsSync(`${destDir}`)) {
@@ -55,11 +45,12 @@ export const generateCustomizeManifest = (
 
 export const runInit = async (
   appId: string,
+  scope: "ALL" | "ADMIN" | "NONE",
   lang: Lang,
   destDir: string
 ): Promise<any> => {
   const m = getBoundMessage(lang);
-  const customizeManifest = getInitCustomizeManifest(appId);
+  const customizeManifest = getInitCustomizeManifest(appId, scope);
   await generateCustomizeManifest(customizeManifest, destDir);
   console.log(m("M_CommandInitFinish"));
 };
