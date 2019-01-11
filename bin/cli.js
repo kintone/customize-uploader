@@ -39,7 +39,7 @@ const cli = meow(
     --guest-space-id Guest space ID for uploading files
 
   SubCommands
-    init   generate customize-manifest.json with appId
+    init   generate customize-manifest.json
     
     import download js/css files and update customize-manifest.json
     
