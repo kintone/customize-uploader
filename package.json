@@ -38,7 +38,7 @@
   "homepage": "https://github.com/kintone/customize-uploader#readme",
   "devDependencies": {
     "@types/chokidar": "^1.7.5",
-    "@types/inquirer": "6.0.2",
+    "@types/inquirer": "6.0.3",
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.14.13",
     "@types/request-promise": "^4.1.44",
