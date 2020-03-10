@@ -14,7 +14,7 @@
     "build": "tsc",
     "lint": "run-p lint:*",
     "lint:tsc": "tsc --noEmit",
-    "lint:eslint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
+    "lint:eslint": "eslint --ext .ts src test",
     "release": "run-s lint build && standard-version",
     "release:dryrun": "standard-version --dry-run",
     "test": "mocha --require ts-node/register --watch-extensions ts test/**/*-test.ts"
