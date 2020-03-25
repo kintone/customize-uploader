@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/kintone/customize-uploader#readme",
   "devDependencies": {
-    "@cybozu/eslint-config": "^10.0.1",
+    "@cybozu/eslint-config": "^10.0.2",
     "@types/chokidar": "^1.7.5",
     "@types/inquirer": "6.5.0",
     "@types/mkdirp": "^1.0.0",
