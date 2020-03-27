@@ -1,5 +1,11 @@
 # kintone-customize-uploader
 
+## :warning::warning: This project has migrated to [kintone/js-sdk](https://github.com/kintone/js-sdk/tree/master/packages/customize-uploader). :warning::warning:
+
+**We keep maintaining `@kintone/customize-uploader` on [kintone/js-sdk](https://github.com/kintone/js-sdk/tree/master/packages/customize-uploader). :rocket::rocket:**
+
+<!--
+
 [![npm version](https://badge.fury.io/js/%40kintone%2Fcustomize-uploader.svg)](https://badge.fury.io/js/%40kintone%2Fcustomize-uploader)
 [![CircleCI](https://circleci.com/gh/kintone/customize-uploader.svg?style=shield)](https://circleci.com/gh/kintone/customize-uploader)
 [![Build Status](https://travis-ci.org/kintone/customize-uploader.svg?branch=master)](https://travis-ci.org/kintone/customize-uploader)
@@ -146,3 +152,5 @@ In this example, JavaScript and CSS Customization is set as below.
 
 ## LICENSE
 MIT License
+
+-->
